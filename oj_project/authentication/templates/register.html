@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="oj-auth-container">
+    <h2 class="text-center mb-4">Join TryCode</h2>
+    <form method="post" class="oj-auth-form">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="oj-error">{{ form.username.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="oj-error">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+            <small class="form-text">At least 8 characters with numbers</small>
+        </div>
+        <div class="mb-3">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+        </div>
+        <button type="submit" class="btn oj-submit-btn">Register</button>
+    </form>
+    <p class="text-center mt-3">
+        Already registered? <a href="{% url 'login' %}">Login here</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="oj-auth-container">
+    <h2 class="text-center mb-4">Login to TryCode</h2>
+    <form method="post" class="oj-auth-form">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+        </div>
+        <div class="mb-3">
+            {{ form.password.label_tag }}
+            {{ form.password }}
+        </div>
+        {% if form.non_field_errors %}
+            <div class="oj-error mb-3">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+        <button type="submit" class="btn oj-submit-btn">Login</button>
+    </form>
+    <p class="text-center mt-3">
+        New to TryCode? <a href="{% url 'register' %}">Create account</a>
+    </p>
+</div>
+{% endblock %}
