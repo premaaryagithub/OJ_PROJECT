@@ -1,37 +1,175 @@
-{% extends "base.html" %}
+<head>
+    <style>
+/* Container */
+.oj-auth-container {
+    max-width: 420px;
+    margin: 60px auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    animation: fadeIn 0.5s ease-out;
+}
 
-{% block content %}
+/* Fade-in effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Heading */
+.oj-auth-container h2 {
+    font-size: 26px;
+    color: blueviolet;
+    font-weight: bold;
+}
+
+/* Labels */
+.oj-auth-form label {
+    color: blueviolet;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Input fields */
+.oj-auth-form .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.oj-auth-form .form-control:focus {
+    border-color: blueviolet;
+    outline: none;
+    box-shadow: 0 0 6px rgba(138, 43, 226, 0.4);
+}
+
+/* Register button */
+.oj-submit-btn {
+    background-color: blueviolet;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.oj-submit-btn:hover {
+    background-color: indigo;
+}
+
+/* Alert messages */
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background-color: #e9f9ee;
+    color: #2e7d32;
+}
+
+.alert-error {
+    background-color: #fdecea;
+    color: #d32f2f;
+}
+
+/* Footer text */
+.oj-auth-container p {
+    color: #555;
+    font-size: 14px;
+}
+
+.oj-auth-container a {
+    color: blueviolet;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    text-decoration: underline;
+}
+
+.oj-auth-container a:hover {
+    color: indigo;
+}
+.close-btn {
+    font-size: 24px;
+    border: none;
+    background: none;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: blueviolet;
+}
+
+.modal-con {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+p
+{
+    text-align: center;
+
+}
+
+    </style>
+
 <div class="oj-auth-container">
+    <div class="modal-con">
     <h2 class="text-center mb-4">Join TryCode</h2>
+    <button class="close-btn" id="close-login">&times;</button>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
     <form method="post" class="oj-auth-form">
         {% csrf_token %}
         <div class="mb-3">
-            {{ form.username.label_tag }}
-            {{ form.username }}
-            {% if form.username.errors %}
-                <div class="oj-error">{{ form.username.errors }}</div>
-            {% endif %}
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required>
         </div>
         <div class="mb-3">
-            {{ form.email.label_tag }}
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div class="oj-error">{{ form.email.errors }}</div>
-            {% endif %}
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" class="form-control" required>
+        <div class="mb-3">
+            <label for="password1">Password</label>
+            <input type="password" id="password1" name="password1" class="form-control" required>
         </div>
         <div class="mb-3">
-            {{ form.password1.label_tag }}
-            {{ form.password1 }}
-            <small class="form-text">At least 8 characters with numbers</small>
-        </div>
-        <div class="mb-3">
-            {{ form.password2.label_tag }}
-            {{ form.password2 }}
+            <label for="password2">Confirm Password</label>
+            <input type="password" id="password2" name="password2" class="form-control" required>
         </div>
         <button type="submit" class="btn oj-submit-btn">Register</button>
     </form>
+    
     <p class="text-center mt-3">
-        Already registered? <a href="{% url 'login' %}">Login here</a>
+        Already Have An  Account? <a href="{% url 'login' %}">Login here</a>
     </p>
 </div>
-{% endblock %}
+
+</head>

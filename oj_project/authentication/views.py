@@ -3,53 +3,69 @@ from django import forms
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.template import loader
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.contrib import messages 
+from django.contrib.auth.decorators import login_required
+
+@login_required(login_url='login')
+def home_page_view(request):
+    return render(request, 'home.html', {'username': request.user.username})
+
+
+
+
 
 def home_view(request):
-    return render(request, 'base.html')  # Updated path
-
-class EmailOrUsernameAuthForm(AuthenticationForm):
-    def clean(self):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-
-        if username and password:
-            # Try authenticating with email or username
-            self.user_cache = authenticate(
-                request=self.request,
-                username=username,
-                password=password
-            )
-            
-            if self.user_cache is None:
-                raise forms.ValidationError(
-                    "Please enter a correct email/username and password."
-                )
-            
-            self.confirm_login_allowed(self.user_cache)
-
-        return self.cleaned_data
+    template = loader.get_template("base.html")
+    context = {}
+    return HttpResponse(template.render(context,request))
 
 def login_view(request):
-    if request.method == 'POST':
-        form = EmailOrUsernameAuthForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')
-    else:
-        form = EmailOrUsernameAuthForm()
-    return render(request, 'login.html', {'form': form})
+
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if not User.objects.filter(username=username).exists():
+            messages.info(request, 'User with this username does not exist')
+            return redirect('/')
+
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            messages.info(request, 'invalid password')
+            return redirect('/')
+
+        login(request, user)
+        messages.info(request, 'login successful')
+        return redirect('home-page/')
+
+    template = loader.get_template('login.html')
+    context = {}
+    return HttpResponse(template.render(context,request))
 
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
-    else:
-        form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})  # Updated path
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = User.objects.filter(username=username)
+
+        if user.exists():
+            messages.info(request, 'User with this username already exists')
+            return redirect("/")
+
+        user = User.objects.create_user(username=username)
+        user.set_password(password)
+        user.save()
+
+        messages.info(request, 'User created successfully')
+        return redirect("../login/")
+    template = loader.get_template("register.html")
+    context = {}
+    return HttpResponse(template.render(context,request))
 
 def logout_view(request):
     logout(request)

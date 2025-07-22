@@ -530,67 +530,15 @@
         <div class="footer-links">
             <a href="#" class="footer-link">Contact Us</a>
             <a href="#" class="footer-link">GitHub</a>
-
+        </div>
+        </footer>
 
     <!-- Login Modal -->
-    <div class="modal" id="login-modal">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title">Login</h3>
-            <button class="close-btn" id="close-login">&times;</button>
-        </div>
-        <form id="login-form">
-            <div class="form-group">
-                <label for="login-username">Email or Username</label>
-                <input type="text" id="login-username" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="login-password">Password</label>
-                <input type="password" id="login-password" class="form-control" required>
-            </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
-                </div>
-                <div class="form-footer">
-                    <p>Don't have an account? <a href="#" id="switch-to-register">Register</a></p>
-                </div>
-            </form>
-        </div>
-    </div>
+    
+  
 
     <!-- Register Modal -->
-    <div class="modal" id="register-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Register</h3>
-                <button class="close-btn" id="close-register">&times;</button>
-            </div>
-            <form id="register-form">
-                <div class="form-group">
-                    <label for="register-name">Name</label>
-                    <input type="text" id="register-name" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="register-email">Email</label>
-                    <input type="email" id="register-email" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="register-password">Password</label>
-                    <input type="password" id="register-password" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="register-confirm-password">Confirm Password</label>
-                    <input type="password" id="register-confirm-password" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
-                </div>
-                <div class="form-footer">
-                    <p>Already have an account? <a href="#" id="switch-to-login">Login</a></p>
-                </div>
-            </form>
-        </div>
-    </div>
+    
 
     <script>
         // JavaScript for modal functionality
@@ -600,78 +548,25 @@
             const registerModal = document.getElementById('register-modal');
             
             // Get button elements
-            const loginLinks = document.querySelectorAll('#login-link, #mobile-login-btn');
-            const registerLinks = document.querySelectorAll('#register-link, #mobile-register-btn');
+          
             const closeLogin = document.getElementById('close-login');
             const closeRegister = document.getElementById('close-register');
             const switchToRegister = document.getElementById('switch-to-register');
             const switchToLogin = document.getElementById('switch-to-login');
             
-            // Show login modal
-            loginLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    registerModal.classList.remove('active');
-                    loginModal.classList.add('active');
-                });
-            });
+         
             
-            // Show register modal
-            registerLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    loginModal.classList.remove('active');
-                    registerModal.classList.add('active');
-                });
-            });
+           
+
             
-            // Close modals
-            closeLogin.addEventListener('click', function() {
-                loginModal.classList.remove('active');
+            document.getElementById('mobile-login-btn').addEventListener('click', function () {
+        window.location.href = "{% url 'login' %}";
+    });
+
+            document.getElementById('mobile-register-btn').addEventListener('click', function () {
+                window.location.href = "{% url 'register' %}";
             });
-            
-            closeRegister.addEventListener('click', function() {
-                registerModal.classList.remove('active');
-            });
-            
-            // Switch between modals
-            switchToRegister.addEventListener('click', function(e) {
-                e.preventDefault();
-                loginModal.classList.remove('active');
-                registerModal.classList.add('active');
-            });
-            
-            switchToLogin.addEventListener('click', function(e) {
-                e.preventDefault();
-                registerModal.classList.remove('active');
-                loginModal.classList.add('active');
-            });
-            
-            // Close modal when clicking outside
-            window.addEventListener('click', function(e) {
-                if (e.target === loginModal) {
-                    loginModal.classList.remove('active');
-                }
-                if (e.target === registerModal) {
-                    registerModal.classList.remove('active');
-                }
-            });
-            
-            // Form submissions
-            document.getElementById('login-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                // to be add login logic here
-                alert('successfully Entered');
-                loginModal.classList.remove('active');
-            });
-            
-            document.getElementById('register-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                // to be add  registration logic here
-                alert('Succesfully Registered ');
-                registerModal.classList.remove('active');
-            });
-            
+          
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
