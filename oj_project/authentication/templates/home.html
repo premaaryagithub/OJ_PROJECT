@@ -1,11 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <style>
-           h3
-           {
-            text-align: center;
-            font-size: large;
-           }
-    </style>   
-<h3>Welcome, {{ username }}!</h3>
-</head>
+  <meta charset="UTF-8" />
+  <title>TryCode | Topics Dashboard</title>
+ 
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
 
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #f3f0ff;
+      color: #333;
+    }
+
+    /* Logo base styling */
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      text-decoration: none;
+      color: #1e90ff;
+    }
+
+    .logo .code-highlight {
+      color: #ff69b4;
+    }
+
+    .logo:hover .code-highlight {
+      text-shadow: 0 0 4px rgba(255, 105, 180, 0.5);
+    }
+
+    .logo:hover {
+      color: #1c7ed6;
+    }
+
+    /* Header */
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      padding: 20px 40px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: blueviolet;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: indigo;
+    }
+
+    .user-greeting {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-weight: 600;
+      color: blueviolet;
+    }
+
+    .logout-btn {
+      padding: 8px 16px;
+      background-color: blueviolet;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background-color: indigo;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="main-header">
+    <a href="#" class="logo">Try<span class="code-highlight">Code</span></a>
+    <nav class="nav-links">
+      <a href="#topics-section">Topics</a>
+      <a href="{% url 'submission_list' %}">Submissions</a>
+      <a href="{% url 'my_submission_list' %}">My Submissions</a>
+    </nav>
+    <div class="user-greeting">
+      <span>🎉 Welcome, {{ request.user.username }}!</span>
+      <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+    </div>
+  </header>
+ <div>
+  {% block content %}{% endblock %}
+ </div>
+
+
+</body>
+</html>

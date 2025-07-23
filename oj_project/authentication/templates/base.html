@@ -6,457 +6,458 @@
     <title>TryCode - Online Judge</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS will be placed here for the template */
-        :root {
-            --primary-color: #6c63ff;
-            --secondary-color: #4a42e8;
-            --accent-color: #ff6584;
-            --dark-color: #2d3748;
-            --light-color: #f7fafc;
-            --success-color: #48bb78;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background-color: #f5f7fa;
-            color: var(--dark-color);
-            line-height: 1.6;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 5%;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo span {
-            color: var(--accent-color);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: var(--dark-color);
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-link:hover {
-            color: var(--primary-color);
-            background-color: rgba(108, 99, 255, 0.1);
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--primary-color);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 5px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(108, 99, 255, 0.3);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-        }
-
-        .btn-outline:hover {
-            background-color: rgba(108, 99, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal.active .modal-content {
-            transform: translateY(0);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--dark-color);
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color : blue ;
-            text-align: left;
-            width: 100%;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
-        }
-
-        .form-footer {
-            margin-top: 1.5rem;
-            text-align: center;
-            color : blue;
-        }
-
-        .form-footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Sections */
-        .section {
-            padding: 5rem 5%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--primary-color);
-            text-align: center;
-        }
-
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: var(--dark-color);
-            margin-bottom: 3rem;
-            text-align: center;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* How it works section */
-        .steps-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .step {
-            flex: 1;
-            min-width: 250px;
-            max-width: 300px;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .step:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .step-number {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 3rem;
-            font-weight: 700;
-            color: rgba(108, 99, 255, 0.1);
-        }
-
-        .step-title {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-        }
-
-        .step-description {
-            color: #666;
-        }
-
-        /* About section */
-        .about-content {
-            background-color: white;
-            padding: 3rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .about-text {
-            margin-bottom: 2rem;
-        }
-
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .tech-item {
-            background-color: var(--light-color);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: var(--primary-color);
-            border: 1px solid rgba(108, 99, 255, 0.2);
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--dark-color);
-            color: white;
-            padding: 2rem 5%;
-            text-align: center;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-link {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--accent-color);
-        }
-
-        .copyright {
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+            /* CSS will be placed here for the template */
+            :root {
+                --primary-color: #6c63ff;
+                --secondary-color: #4a42e8;
+                --accent-color: #ff6584;
+                --dark-color: #2d3748;
+                --light-color: #f7fafc;
+                --success-color: #48bb78;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Poppins', sans-serif;
             }
-        }
 
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease forwards;
-        }
+            body {
+                background-color: #f5f7fa;
+                color: var(--dark-color);
+                line-height: 1.6;
+            }
 
-        .delay-1 {
-            animation-delay: 0.2s;
-        }
-
-        .delay-2 {
-            animation-delay: 0.4s;
-        }
-
-        .delay-3 {
-            animation-delay: 0.6s;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
             .navbar {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem 5%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.5rem 5%;
+                background-color: white;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+            }
+
+            .logo {
+                font-size: 1.8rem;
+                font-weight: 700;
+                color: var(--primary-color);
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+            }
+
+            .logo span {
+                color: var(--accent-color);
             }
 
             .nav-links {
-                flex-wrap: wrap;
+                display: flex;
+                gap: 2rem;
+            }
+
+            .nav-link {
+                text-decoration: none;
+                color: var(--dark-color);
+                font-weight: 500;
+                padding: 0.5rem 1rem;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+            .nav-link:hover {
+                color: var(--primary-color);
+                background-color: rgba(108, 99, 255, 0.1);
+            }
+
+            .nav-link::after {
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 2px;
+                bottom: 0;
+                left: 0;
+                background-color: var(--primary-color);
+                transition: width 0.3s ease;
+            }
+
+            .nav-link:hover::after {
+                width: 100%;
+            }
+
+            .auth-buttons {
+                display: flex;
+                gap: 1rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1.2rem;
+                border-radius: 5px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: none;
+            }
+
+            .btn-primary {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background-color: var(--secondary-color);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(108, 99, 255, 0.3);
+            }
+
+            .btn-outline {
+                background-color: transparent;
+                color: var(--primary-color);
+                border: 1px solid var(--primary-color);
+            }
+
+            .btn-outline:hover {
+                background-color: rgba(108, 99, 255, 0.1);
+                transform: translateY(-2px);
+            }
+
+            /* Modal styles */
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 2000;
+                justify-content: center;
+                align-items: center;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .modal.active {
+                display: flex;
+                opacity: 1;
+            }
+
+            .modal-content {
+                background-color: white;
+                padding: 2rem;
+                border-radius: 10px;
+                width: 90%;
+                max-width: 400px;
+                transform: translateY(-20px);
+                transition: transform 0.3s ease;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            }
+
+            .modal.active .modal-content {
+                transform: translateY(0);
+            }
+
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1.5rem;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+                color: var(--primary-color);
+            }
+
+            .close-btn {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: var(--dark-color);
+            }
+
+            .form-group {
+                margin-bottom: 1.2rem;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 500;
+                color : blue ;
+                text-align: left;
+                width: 100%;
+            }
+
+            .form-control {
+                width: 100%;
+                padding: 0.8rem;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 1rem;
+                transition: border-color 0.3s ease;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+            }
+
+            .form-footer {
+                margin-top: 1.5rem;
+                text-align: center;
+                color : blue;
+            }
+
+            .form-footer a {
+                color: var(--primary-color);
+                text-decoration: none;
+            }
+
+            .form-footer a:hover {
+                text-decoration: underline;
+            }
+
+            /* Sections */
+            .section {
+                padding: 5rem 5%;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
                 justify-content: center;
             }
 
-            .section {
-                padding: 3rem 5%;
-            }
-
             .section-title {
-                font-size: 2rem;
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+                color: var(--primary-color);
+                text-align: center;
             }
-        }
 
-      
-        .oj-auth-container {
-            max-width: 450px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+            .section-subtitle {
+                font-size: 1.2rem;
+                color: var(--dark-color);
+                margin-bottom: 3rem;
+                text-align: center;
+                max-width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+            }
 
-        .oj-auth-form input {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
+            /* How it works section */
+            .steps-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 2rem;
+                margin-top: 3rem;
+            }
 
-        .oj-error {
-            color: #dc3545;
-            font-size: 0.9rem;
-        }
+            .step {
+                flex: 1;
+                min-width: 250px;
+                max-width: 300px;
+                background-color: white;
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
 
-        .oj-submit-btn {
-            background: #6c63ff;
-            color: white;
-            width: 100%;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+            .step:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            }
 
-        .oj-submit-btn:hover {
-            background: #5a52d3;
-        }
+            .step-number {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                font-size: 3rem;
+                font-weight: 700;
+                color: rgba(108, 99, 255, 0.1);
+            }
+
+            .step-title {
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: var(--primary-color);
+            }
+
+            .step-description {
+                color: #666;
+            }
+
+            /* About section */
+            .about-content {
+                background-color: white;
+                padding: 3rem;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+            .about-text {
+                margin-bottom: 2rem;
+            }
+
+            .tech-stack {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+
+            .tech-item {
+                background-color: var(--light-color);
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                color: var(--primary-color);
+                border: 1px solid rgba(108, 99, 255, 0.2);
+            }
+
+            /* Footer */
+            footer {
+                background-color: var(--dark-color);
+                color: white;
+                padding: 2rem 5%;
+                text-align: center;
+            }
+
+            .footer-links {
+                display: flex;
+                justify-content: center;
+                gap: 2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .footer-link {
+                color: white;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            .footer-link:hover {
+                color: var(--accent-color);
+            }
+
+            .copyright {
+                opacity: 0.7;
+                font-size: 0.9rem;
+            }
+
+            /* Animations */
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .fade-in-up {
+                animation: fadeInUp 0.6s ease forwards;
+            }
+
+            .delay-1 {
+                animation-delay: 0.2s;
+            }
+
+            .delay-2 {
+                animation-delay: 0.4s;
+            }
+
+            .delay-3 {
+                animation-delay: 0.6s;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .navbar {
+                    flex-direction: column;
+                    gap: 1rem;
+                    padding: 1rem 5%;
+                }
+
+                .nav-links {
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+
+                .section {
+                    padding: 3rem 5%;
+                }
+
+                .section-title {
+                    font-size: 2rem;
+                }
+            }
+
+        
+            .oj-auth-container {
+                max-width: 450px;
+                margin: 2rem auto;
+                padding: 2rem;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            .oj-auth-form input {
+                width: 100%;
+                padding: 0.75rem;
+                margin-bottom: 0.5rem;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+
+            .oj-error {
+                color: #dc3545;
+                font-size: 0.9rem;
+            }
+
+            .oj-submit-btn {
+                background: #6c63ff;
+                color: white;
+                width: 100%;
+                padding: 0.75rem;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            .oj-submit-btn:hover {
+                background: #5a52d3;
+            }
     </style>
 </head>
 <body>
+  
+  
+
+
     <!-- Navigation Bar -->
     <nav class="navbar">
         <a href="#" class="logo">Try<span>Code</span></a>
         
         <div class="nav-links">
             <a href="#how-it-works" class="nav-link">Get to Know</a>
-            {% if user.is_authenticated %}
-                <a href="#" class="nav-link">Dashboard</a>
-                <a href="{% url 'logout' %}" class="nav-link">Logout</a>
-            {% else %}
+         
                
-            {% endif %}
+           
             <a href="#about" class="nav-link">About</a>
         </div>
         

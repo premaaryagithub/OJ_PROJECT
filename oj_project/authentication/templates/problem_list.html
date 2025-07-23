@@ -1,0 +1,9 @@
+{% load get_item_tags %}
+
+
+<h2>{{ topic.name }} - Problems</h2>
+<ul>
+  {% for problem in problems %}
+    <li><a href="{% url 'problem_detail' problem.id %}">{{ problem.title }}</a></li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,11 @@
+<table>
+<tr><th>User</th><th>Problem</th><th>Verdict</th><th>Submitted At</th></tr>
+{% for sub in submissions %}
+  <tr>
+    <td>{{ sub.user.username }}</td>
+    <td>{{ sub.problem.title }}</td>
+    <td>{{ sub.verdict }}</td>
+    <td>{{ sub.submitted_at|naturaltime }}</td>
+  </tr>
+{% endfor %}
+</table>
