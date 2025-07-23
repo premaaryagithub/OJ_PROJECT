@@ -22,6 +22,8 @@ class TestCase(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='testcases')
     input_data = models.TextField()
     expected_output = models.TextField()
+    def __str__(self):
+        return f"{self.problem.title}"
 
 class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
