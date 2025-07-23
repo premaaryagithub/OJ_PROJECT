@@ -1,11 +1,88 @@
-<table>
-<tr><th>User</th><th>Problem</th><th>Verdict</th><th>Submitted At</th></tr>
-{% for sub in submissions %}
-  <tr>
-    <td>{{ sub.user.username }}</td>
-    <td>{{ sub.problem.title }}</td>
-    <td>{{ sub.verdict }}</td>
-    <td>{{ sub.submitted_at|naturaltime }}</td>
-  </tr>
-{% endfor %}
-</table>
+{% extends 'home.html' %}
+{% load humanize %}
+{% block content %}
+<style>
+    .all-submissions-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.all-submissions-container h2 {
+  text-align: center;
+  font-size: 28px;
+  color: #5c2dab;
+  margin-bottom: 30px;
+}
+
+.all-submissions-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.all-submissions-container th,
+.all-submissions-container td {
+  padding: 12px 18px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.all-submissions-container th {
+  background-color: #f6f4ff;
+  color: #5c2dab;
+  font-weight: 600;
+}
+
+.all-submissions-container td a {
+  color: blueviolet;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.all-submissions-container td a:hover {
+  text-decoration: underline;
+}
+
+.all-submissions-container tr:hover {
+  background-color: #fafafa;
+}
+
+@media (max-width: 768px) {
+  .all-submissions-container {
+    padding: 20px;
+  }
+
+  .all-submissions-container table,
+  .all-submissions-container th,
+  .all-submissions-container td {
+    font-size: 14px;
+  }
+}
+
+</style>    
+<div class="all-submissions-container">
+  <h2>Submissions</h2>
+  <table>
+    <tr>
+      <th>User</th>
+      <th>Problem</th>
+      <th>Verdict</th>
+      <th>Submitted At</th>
+    </tr>
+    {% for sub in submissions %}
+      <tr>
+        <td>{{ sub.user.username }}</td>
+        <td><a href="{% url 'problem_detail' sub.problem.id %}">{{ sub.problem.title }}</a></td>
+        <td>{{ sub.verdict }}</td>
+        <td>{{ sub.submitted_at|naturaltime }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% endblock %}

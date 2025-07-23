@@ -1,98 +1,102 @@
-  <!-- Topics Section -->
 {% extends "home.html" %}
+{% load get_item_tags %}
+
 {% block content %}
-<head>
-     {% load get_item_tags %}
-    <style>
-        
-    /* Topics Section */
-    .topics-section {
-      padding: 60px 20px;
-      text-align: center;
-    }
+<style>
+  .topics-section {
+    padding: 60px 20px;
+    text-align: center;
+  }
 
-    .topics-section h2 {
-      font-size: 32px;
-      color: blueviolet;
-      margin-bottom: 40px;
-    }
+  .topics-section h2 {
+    font-size: 32px;
+    color: blueviolet;
+    margin-bottom: 40px;
+  }
 
-    /* Grid layout */
-    .topic-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-      padding: 0 40px;
-    }
-    .topic-grid:empty::before {
-  content: "No topics available";
-  font-size: 18px;
-  color: #888;
-}
+  .topic-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 0 40px;
+  }
 
-    .topic-card {
-      background-color: white;
-      width: 250px;
-      padding: 25px 20px;
-      border-radius: 12px;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
-      text-align: center;
-      transition: transform 0.2s ease;
-    }
+  .topic-card {
+    background-color: white;
+    width: 250px;
+    padding: 25px 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
 
-    .topic-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    }
+  .topic-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
 
-    .topic-name {
-      font-size: 20px;
-      font-weight: 600;
-      color: blueviolet;
-      margin-bottom: 15px;
-    }
+  .topic-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: blueviolet;
+    margin-bottom: 15px;
+    
+  }
+  .topic-name a
+  {
+    text-decoration: None;
+  }
+  .progress-container {
+    width: 100%;
+    margin-top: 8px;
+  }
 
-    .progress-container {
-      width: 100%;
-      margin-top: 8px;
-    }
+  .progress-bar {
+    height: 10px;
+    background-color: #eee;
+    border-radius: 6px;
+    overflow: hidden;
+  }
 
-    .progress-bar {
-      height: 10px;
-      background-color: #eee;
-      border-radius: 6px;
-      overflow: hidden;
-    }
+  .progress-fill {
+    height: 100%;
+    background-color: #4caf50;
+    transition: width 0.4s ease;
+  }
 
-    .progress-fill {
-      height: 100%;
-      background-color: #4caf50;
-      transition: width 0.4s ease;
-    }
+  .progress-label {
+    font-size: 12px;
+    margin-top: 4px;
+    color: #444;
+  }
 
-    .progress-label {
-      font-size: 12px;
-      margin-top: 4px;
-      color: #444;
-    }
-    </style>
-</head>
+  .topic-grid:empty::before {
+    content: "No topics available";
+    font-size: 18px;
+    color: #888;
+  }
+</style>
+
 <main id="topics-section" class="topics-section">
-<h2>Practice Topics</h2>
-<div class="topic-grid">
-  {% for topic in topics %}
-    <div class="topic-card">
-      <div class="topic-name">
-        <a href="{% url 'problem_list' topic.id %}">{{ topic.name }}</a>
-      </div>
-      <div class="progress-container">
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: {{ progress|get_item:topic.id }}%;"></div>
+  <h2>Practice Topics</h2>
+  <div class="topic-grid">
+    {% for topic in topics %}
+      <div class="topic-card">
+        <div class="topic-name">
+          <a href="{% url 'problem_list' topic.id %}">{{ topic.name }}</a>
         </div>
-        <span class="progress-label">{{ progress|get_item:topic.id }}% solved</span>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ progress|get_item:topic.id }}%;"></div>
+          </div>
+          <span class="progress-label">{{ progress|get_item:topic.id }}% solved</span>
+        </div>
       </div>
-    </div>
-  {% endfor %}
-</div>
+    {% empty %}
+      <p>No topics available.</p>
+    {% endfor %}
+  </div>
+</main>
 {% endblock %}

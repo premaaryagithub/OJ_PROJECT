@@ -57,6 +57,8 @@
 
     .nav-links a:hover {
       color: indigo;
+
+      
     }
 
     .user-greeting {
@@ -80,6 +82,39 @@
     .logout-btn:hover {
       background-color: indigo;
     }
+    .nav-links #nav_bar {
+  display: inline-block;
+  padding: 10px 18px;
+  font-size: 16px;
+  color: blueviolet;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Add underline on hover */
+.nav-links #nav_bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background-color: blueviolet;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+/* On hover: grow block + show underline */
+.nav-links #nav_bar:hover {
+  background-color: #ece0ff;
+  transform: scale(1.08);
+}
+
+.nav-links #nav_bar:hover::after {
+  transform: scaleX(1);
+}
 
   </style>
 </head>
@@ -89,9 +124,10 @@
   <header class="main-header">
     <a href="#" class="logo">Try<span class="code-highlight">Code</span></a>
     <nav class="nav-links">
-      <a href="#topics-section">Topics</a>
-      <a href="{% url 'submission_list' %}">Submissions</a>
-      <a href="{% url 'my_submission_list' %}">My Submissions</a>
+      <a href="{% url 'topics' %}" id="nav_bar">Topics</a>
+
+      <a href="{% url 'submission_list' %}" id = "nav_bar">Submissions</a>
+      <a href="{% url 'my_submission_list' %}" id="nav_bar">My Submissions</a>
     </nav>
     <div class="user-greeting">
       <span>🎉 Welcome, {{ request.user.username }}!</span>
@@ -99,7 +135,23 @@
     </div>
   </header>
  <div>
-  {% block content %}{% endblock %}
+  {% block content %}
+  <main style="padding: 60px 40px; text-align: center;">
+    <h1 style="color: blueviolet; font-size: 36px;">Welcome to TryCode 🚀</h1>
+    <p style="font-size: 18px; color: #555; max-width: 600px; margin: 20px auto;">
+      Get ready to sharpen your problem-solving skills! Dive into curated coding challenges by topic, track your progress, and see how you stack up. Whether you're a beginner or a seasoned coder, TryCode is your personal coding gym. 🧠💻
+    </p>
+
+    <a href="{% url 'topics' %}" style="display: inline-block; padding: 14px 28px; margin-top: 30px; font-size: 18px; background-color: blueviolet; color: white; border-radius: 8px; text-decoration: none; transition: background-color 0.3s;">
+      🌟 Start Practicing
+    </a>
+
+    <div style="margin-top: 60px;">
+      <p style="font-style: italic; color: #999;">“Every expert was once a beginner. Keep solving and level up.”</p>
+    </div>
+  </main>
+{% endblock %}
+
  </div>
 
 

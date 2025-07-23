@@ -1,9 +1,77 @@
 {% load get_item_tags %}
+<style>
+    .problem-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
 
+.topic-heading {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #5c2dab;
+}
 
-<h2>{{ topic.name }} - Problems</h2>
-<ul>
-  {% for problem in problems %}
-    <li><a href="{% url 'problem_detail' problem.id %}">{{ problem.title }}</a></li>
-  {% endfor %}
-</ul>
+.problem-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.problem-header {
+  font-weight: bold;
+  font-size: 18px;
+  color: #666;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.problem-item {
+  padding: 12px 18px;
+  border-radius: 8px;
+  background-color: #f6f4ff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+}
+
+.problem-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(92, 45, 171, 0.2);
+}
+
+.problem-item a {
+  text-decoration: none;
+  color: #5c2dab;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.problem-item a:hover {
+  text-decoration: none;
+}
+
+</style>    
+<div class="problem-container">
+  <h2 class="topic-heading">{{ topic.name }}</h2>
+
+  <div class="problem-list">
+    <div class="problem-header">
+      <span>Problems </span>
+    </div>
+
+    {% for problem in problems %}
+      <div class="problem-item">
+        <a href="{% url 'problem_detail' problem.id %}" >{{ problem.title }}</a>
+      </div>
+    {% empty %}
+      <div class="problem-item">
+        <em>No problems available for this topic yet.</em>
+      </div>
+    {% endfor %}
+  </div>
+</div>

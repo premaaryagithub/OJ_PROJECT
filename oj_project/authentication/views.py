@@ -17,23 +17,19 @@ from .models import Topic
 
 @login_required
 def problem_detail_view(request, problem_id):
-    problem = get_object_or_404(Problem, id=problem_id)
+    problem = Problem.objects.get(id=problem_id)
+    testcases = TestCase.objects.filter(problem=problem)
 
+    verdict = None
     if request.method == 'POST':
-        code = request.POST.get('code')
-        verdict = 'Accepted'
-        for test in problem.testcases.all():
-            simulated_output = code.strip()  # Placeholder logic
-            if simulated_output != test.expected_output.strip():
-                verdict = 'Wrong Answer'
-                break
-        Submission.objects.create(
-            user=request.user, problem=problem, code=code,
-            submitted_at=timezone.now(), verdict=verdict
-        )
-        return render(request, 'verdict.html', {'verdict': verdict, 'problem': problem})
+        # Your verdict logic here...
+        verdict = "Accepted"  # or "Wrong Answer"
 
-    return render(request, 'problem_page.html', {'problem': problem})
+    return render(request, 'problem_page.html', {
+        'problem': problem,
+        'testcases': testcases,
+        'verdict': verdict
+    })
 
 
 
@@ -41,9 +37,23 @@ def problem_detail_view(request, problem_id):
 
 
 
+
+@login_required
 def topic_list_view(request):
     topics = Topic.objects.all()
-    return render(request, 'topic.html', {'topics': topics})
+    progress = {}
+
+    for topic in topics:
+        total = topic.problems.count()
+        solved = Submission.objects.filter(
+            user=request.user,
+            verdict='Accepted',
+            problem__topic=topic
+        ).values('problem').distinct().count()
+        percentage = round((solved / total) * 100) if total > 0 else 0
+        progress[topic.id] = percentage
+
+    return render(request, 'topic.html', {'topics': topics, 'progress': progress})
 
 
 
@@ -133,7 +143,7 @@ def my_submissions_view(request):
 @login_required
 def all_submissions_view(request):
     submissions = Submission.objects.all().select_related('problem', 'user')
-    return render(request, 'submission.html', {'submissions': submissions})
+    return render(request, 'submissions.html', {'submissions': submissions})
 
 
 

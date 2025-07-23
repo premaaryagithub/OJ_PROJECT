@@ -1,11 +1,73 @@
-<table>
-<tr><th>User</th><th>Problem</th><th>Verdict</th><th>Submitted At</th></tr>
-{% for sub in submissions %}
-  <tr>
-    <td>{{ sub.user.username }}</td>
-    <td>{{ sub.problem.title }}</td>
-    <td>{{ sub.verdict }}</td>
-    <td>{{ sub.submitted_at|naturaltime }}</td>
-  </tr>
-{% endfor %}
-</table>
+
+
+{% extends 'home.html' %}
+{% load humanize %}
+{% block content %}
+
+<style>
+.submissions-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.submissions-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.submissions-container th,
+.submissions-container td {
+  padding: 12px 18px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.submissions-container th {
+  background-color: #f6f4ff;
+  font-weight: 600;
+  color: #5c2dab;
+}
+
+.submissions-container td a {
+  color: blueviolet;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.submissions-container td a:hover {
+  text-decoration: underline;
+}
+
+.submissions-container tr:hover {
+  background-color: #fafafa;
+}
+    
+</style>
+
+<div class="submissions-container">
+  <h2 style="text-align:center; color:#5c2dab; margin-bottom:20px;">Your Submissions</h2>
+  <table>
+    <tr>
+      <th>User</th>
+      <th>Problem</th>
+      <th>Verdict</th>
+      <th>Submitted At</th>
+    </tr>
+    {% for sub in submissions %}
+      <tr>
+        <td>{{ sub.user.username }}</td>
+        <td><a href="{% url 'problem_detail' sub.problem.id %}">{{ sub.problem.title }}</a></td>
+        <td>{{ sub.verdict }}</td>
+        <td>{{ sub.submitted_at|naturaltime }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% endblock %}
