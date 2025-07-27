@@ -1,140 +1,164 @@
 {% extends "home.html" %}
 {% block content %}
 <style>
-  .problem-page {
+.problem-page {
   display: flex;
+  align-items: stretch; /* 🔥 ensures equal height */
   justify-content: space-between;
-  align-items: flex-start;
   padding: 40px 60px;
   gap: 40px;
   font-family: 'Poppins', sans-serif;
   background-color: #f4f2fa;
 }
 
-/* Panel Layout */
-.left-panel, .right-panel {
-  background-color: #ffffff;
-  padding: 28px;
-  border-radius: 14px;
-  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
-  flex: 1;
-}
 
-/* Headings */
-.left-panel h2 {
-  font-size: 30px;
-  font-weight: 700;
-  color: #4a2db6;
-  border-bottom: 2px solid #e3dffc;
-  padding-bottom: 10px;
-  margin-bottom: 24px;
-}
+  .left-panel, .right-panel {
+    background-color: #ffffff;
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    flex: 1;
+  }
 
-/* Problem Text */
-.problem-description,
-.format-section p {
-  font-size: 17px;
-  line-height: 1.7;
-  color: #333;
-  white-space: pre-wrap;
-}
+  .left-panel h2 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #4a2db6;
+    border-bottom: 2px solid #e3dffc;
+    padding-bottom: 10px;
+    margin-bottom: 24px;
+  }
 
-/* Format Headings */
-.format-section h4 {
-  font-size: 20px;
-  color: #4a2db6;
-  margin-top: 24px;
-  margin-bottom: 8px;
-}
+  .problem-description,
+  .format-section p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: #333;
+    white-space: pre-wrap;
+  }
 
-/* Test Cases */
-.testcase {
-  border-left: 4px solid #4a2db6;
-  background-color: #f9f7ff;
-  padding: 16px;
-  border-radius: 10px;
-  margin-bottom: 18px;
+  .format-section h4 {
+    font-size: 20px;
+    color: #4a2db6;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  .testcase {
+    border-left: 4px solid #4a2db6;
+    background-color: #f9f7ff;
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-family: monospace;
+  }
+
+  .testcase-section h4 {
+    font-size: 15px;
+    color: #222;
+    margin-bottom: 6px;
+  }
+
+  .testcase-content {
+    background-color: #ffffff;
+    border: 1px dashed #ccc;
+    padding: 10px 14px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+  }
+
+  textarea {
+    width: 100%;
+    height: 260px;
+    font-family: monospace;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+    margin-bottom: 24px;
+    resize: vertical;
+  }
+  textarea#code{
+  background-color: #1e1e1e;
+  color: #dcdcdc;
   font-family: monospace;
-}
-
-.testcase-section h4 {
-  font-size: 15px;
-  color: #222;
-  margin-bottom: 6px;
-}
-
-.testcase-content {
-  background-color: #ffffff;
-  border: 1px dashed #ccc;
-  padding: 10px 14px;
-  border-radius: 6px;
-  white-space: pre-wrap;
-}
-
-/* Code Textarea */
-textarea {
-  width: 100%;
-  height: 260px;
-  font-family: monospace;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 14px;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
-  margin-bottom: 24px;
-  resize: vertical;
-}
-
-/* Buttons */
-.button-bar {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 24px;
-}
-
-.button-bar button {
-  flex: 1;
-  padding: 12px 18px;
-  font-size: 16px;
-  font-weight: 600;
-  background-color:red;
-  color: white;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.3s;
+  padding: 14px;
+  font-size: 14px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  caret-color: white;
 }
 
-.button-bar button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 18px rgba(0,0,0,0.15);
-  background-color: green;
-}
 
-/* Verdict Box */
-.verdict-box {
-  padding: 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 16px;
-  background-color: #eae6ff;
-  color: {% if verdict == 'Accepted' %}green{% else %}crimson{% endif %};
-  border: 1px solid {% if verdict == 'Accepted' %}green{% else %}crimson{% endif %};
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  animation: fadeIn 0.5s ease-in-out;
-}
+  select {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fefefe;
+  }
 
-/* Verdict Animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  .button-bar {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
 
+  .button-bar button {
+    flex: 1;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.3s;
+  }
+
+  .button-bar button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 18px rgba(0,0,0,0.15);
+    background-color: green;
+  }
+
+  .verdict-box {
+    padding: 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #eae6ff;
+    color: {% if verdict == 'Accepted' %}green{% else %}crimson{% endif %};
+    border: 1px solid {% if verdict == 'Accepted' %}green{% else %}crimson{% endif %};
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .output-box, .error-box {
+    background-color: #fefefe;
+    padding: 16px;
+    border: 1px dashed #999;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 14px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 </style>
 
 <div class="problem-page">
-  <!-- Left Panel: Problem Description & Test Cases -->
+  <!-- Left Panel -->
   <div class="left-panel">
     <h2>{{ problem.title }}</h2>
     <p class="problem-description">{{ problem.description }}</p>
@@ -168,24 +192,59 @@ textarea {
     </div>
   </div>
 
-  <!-- Right Panel: Code Input & Verdict -->
+  <!-- Right Panel -->
   <div class="right-panel">
     <form method="POST">
-      {% csrf_token %}
-      <label for="code">Your Code:</label>
-      <textarea name="code" placeholder="Write your code here..."></textarea>
+  {% csrf_token %}
+  <label for="code">Your Code:</label>
+  <textarea name="code"  id="code" required placeholder="Write your code here...">{{ code }}</textarea>
 
-      <div class="button-bar">
-        <button type="button">Run</button>
-        <button type="submit">Submit</button>
-      </div>
+  <label for="language">Select Language:</label>
+  <select name="language" required>
+    <option value="python" {% if language == "python" %}selected{% endif %}>Python</option>
+    <option value="cpp" {% if language == "cpp" %}selected{% endif %}>C++</option>
+    <option value="java" {% if language == "java" %}selected{% endif %}>Java</option>
+  </select>
 
-      {% if verdict %}
-        <div class="verdict-box">
-          Verdict: {{ verdict }}
-        </div>
-      {% endif %}
-    </form>
+  <div class="button-bar">
+    <button type="submit" name="action" value="run">Run</button>
+    <button type="submit" name="action" value="submit">Submit</button>
   </div>
-</div>
+
+{% if verdict %}
+  <div class="verdict-box">Verdict: {{ verdict }}</div>
+
+{% if action == "run" and testcase_results %}
+  <h3>Sample Test Case Results</h3>
+  <div style="display: flex; flex-direction: column; gap: 14px;">
+    {% for result in testcase_results %}
+      <div style="border-radius: 8px; border-left: 6px solid {% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %}; background-color: #f3f3f3; padding: 12px;">
+        <strong>Testcase {{ result.number }} — <span style="color:{% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %};">{{ result.verdict }}</span></strong><br>
+        <div><strong>Input:</strong> {{ result.input }}</div>
+        <div><strong>Expected Output:</strong> {{ result.expected }}</div>
+        <div><strong>Your Output:</strong> {{ result.actual }}</div>
+        {% if result.error %}
+          <div style="color: crimson;"><strong>Error:</strong> {{ result.error }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    
+  </div>
+{% endif %}
+{% if action == "submit" and summary_verdicts %}
+  <h3>Submission Verdicts</h3>
+  <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+    {% for case in summary_verdicts %}
+      <div style="padding: 12px 20px; border-radius: 8px;
+                  background-color: {% if case.verdict == 'Passed' %}#d4edda{% else %}#f8d7da{% endif %};
+                  color: {% if case.verdict == 'Passed' %}green{% else %}crimson{% endif %};
+                  font-weight: bold; border-left: 5px solid {% if case.verdict == 'Passed' %}green{% else %}crimson{% endif %};">
+        {{ case.name }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% endif %}
 {% endblock %}
+

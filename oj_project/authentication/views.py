@@ -12,27 +12,84 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from .models import Problem, TestCase, Submission
 from .models import Topic
+from .forms import SubmissionForm
+from .judge import evaluate_code
 
 
 
 @login_required
 def problem_detail_view(request, problem_id):
-    problem = Problem.objects.get(id=problem_id)
-    testcases = TestCase.objects.filter(problem=problem)
-
+    problem = get_object_or_404(Problem, id=problem_id)
+    testcases = problem.testcases.all()
     verdict = None
-    if request.method == 'POST':
-        # Your verdict logic here...
-        verdict = "Accepted"  # or "Wrong Answer"
+    testcase_results = []
+    summary_verdicts = []
+    action = None
 
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        language = request.POST.get('language')
+        action = request.POST.get('action')
+        selected_testcases = testcases[:2] if action == 'run' else testcases
+
+        all_passed = True
+
+        for index, test in enumerate(selected_testcases):
+            result_output, result_error = evaluate_code(code, language, test.input_data)
+            passed = not result_error and result_output.strip() == test.expected_output.strip()
+
+            if not passed:
+                all_passed = False
+
+            if action == 'run':
+                # Full result breakdown
+                testcase_results.append({
+                    'number': index + 1,
+                    'input': test.input_data,
+                    'expected': test.expected_output,
+                    'actual': result_output,
+                    'error': result_error,
+                    'verdict': 'Passed' if passed else 'Failed'
+                })
+
+            elif action == 'submit':
+                # Minimal verdict boxes (includes hidden cases)
+                summary_verdicts.append({
+                    'name': f'Testcase {index + 1}',
+                    'verdict': 'Passed' if passed else 'Failed'
+                })
+
+        verdict = 'Accepted' if all_passed else 'Wrong Answer'
+
+        # Save submission for submit
+        if action == 'submit':
+            Submission.objects.create(
+                user=request.user,
+                problem=problem,
+                code=code,
+                language=language,
+                verdict=verdict,
+                output=result_output,
+                error=result_error
+            )
+
+        return render(request, 'problem_page.html', {
+            'problem': problem,
+            'verdict': verdict,
+            'testcase_results': testcase_results,
+            'summary_verdicts': summary_verdicts,
+            'testcases': testcases,
+            'code': code,
+            'language': language,
+            'action': action
+        })
+
+    # ✅ Initial GET request (before any submission/run)
     return render(request, 'problem_page.html', {
         'problem': problem,
         'testcases': testcases,
-        'verdict': verdict
+        'action': 'view'
     })
-
-
-
 
 
 
@@ -137,13 +194,19 @@ def register_view(request):
 
 @login_required
 def my_submissions_view(request):
-    submissions = Submission.objects.filter(user=request.user).select_related('problem')
+    submissions = Submission.objects.filter(user=request.user)\
+        .select_related('problem')\
+        .order_by('created_at')  # Ascending by time
     return render(request, 'my_submission.html', {'submissions': submissions})
+
 
 @login_required
 def all_submissions_view(request):
-    submissions = Submission.objects.all().select_related('problem', 'user')
+    submissions = Submission.objects.all()\
+        .select_related('problem', 'user')\
+        .order_by('created_at')  # Ascending by time
     return render(request, 'submissions.html', {'submissions': submissions})
+
 
 
 

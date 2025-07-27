@@ -544,20 +544,31 @@
     <script>
         // JavaScript for modal functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Get modal elements
             const loginModal = document.getElementById('login-modal');
             const registerModal = document.getElementById('register-modal');
             
-            // Get button elements
-          
+            // Get close buttons
             const closeLogin = document.getElementById('close-login');
             const closeRegister = document.getElementById('close-register');
-            const switchToRegister = document.getElementById('switch-to-register');
-            const switchToLogin = document.getElementById('switch-to-login');
             
-         
-            
-           
+            // Close login modal when clicking its close button
+            if (closeLogin) {
+                closeLogin.addEventListener('click', function() {
+                    if (loginModal) {
+                        loginModal.style.display = 'none';  // Hide login modal
+                    }
+                    // Additional handling for register form if needed
+                    const authContainer = document.querySelector('.oj-auth-container');
+                    if (authContainer) {
+                        authContainer.style.display = 'none';
+                    }
+                });
+            }
+                
+        
+
+                    
+                
 
             
             document.getElementById('mobile-login-btn').addEventListener('click', function () {
@@ -576,7 +587,7 @@
                         this.getAttribute('id') === 'switch-to-register' ||
                         this.getAttribute('id') === 'switch-to-login') {
                         return;
-                    }
+                    }   
                     
                     e.preventDefault();
                     
