@@ -543,34 +543,7 @@
 
     <script>
         // JavaScript for modal functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const loginModal = document.getElementById('login-modal');
-            const registerModal = document.getElementById('register-modal');
-            
-            // Get close buttons
-            const closeLogin = document.getElementById('close-login');
-            const closeRegister = document.getElementById('close-register');
-            
-            // Close login modal when clicking its close button
-            if (closeLogin) {
-                closeLogin.addEventListener('click', function() {
-                    if (loginModal) {
-                        loginModal.style.display = 'none';  // Hide login modal
-                    }
-                    // Additional handling for register form if needed
-                    const authContainer = document.querySelector('.oj-auth-container');
-                    if (authContainer) {
-                        authContainer.style.display = 'none';
-                    }
-                });
-            }
-                
-        
-
-                    
-                
-
-            
+        document.addEventListener('DOMContentLoaded', function() {            
             document.getElementById('mobile-login-btn').addEventListener('click', function () {
         window.location.href = "{% url 'login' %}";
     });

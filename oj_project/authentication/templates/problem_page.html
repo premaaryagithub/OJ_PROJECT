@@ -194,57 +194,89 @@
 
   <!-- Right Panel -->
   <div class="right-panel">
-    <form method="POST">
-  {% csrf_token %}
-  <label for="code">Your Code:</label>
-  <textarea name="code"  id="code" required placeholder="Write your code here...">{{ code }}</textarea>
+    <!-- 🟢 Run/Submit Form -->
+    <form method="POST" action="{% url 'problem_detail' problem.id %}">
+      {% csrf_token %}
+      <label for="code">Your Code:</label>
+      <textarea name="code" id="code" required placeholder="Write your code here...">{{ code }}</textarea>
 
-  <label for="language">Select Language:</label>
-  <select name="language" required>
-    <option value="python" {% if language == "python" %}selected{% endif %}>Python</option>
-    <option value="cpp" {% if language == "cpp" %}selected{% endif %}>C++</option>
-    <option value="java" {% if language == "java" %}selected{% endif %}>Java</option>
-  </select>
+      <label for="language">Select Language:</label>
+      <select name="language" required>
+        <option value="python" {% if language == "python" %}selected{% endif %}>Python</option>
+        <option value="cpp" {% if language == "cpp" %}selected{% endif %}>C++</option>
+        <option value="java" {% if language == "java" %}selected{% endif %}>Java</option>
+      </select>
 
-  <div class="button-bar">
-    <button type="submit" name="action" value="run">Run</button>
-    <button type="submit" name="action" value="submit">Submit</button>
-  </div>
-
-{% if verdict %}
-  <div class="verdict-box">Verdict: {{ verdict }}</div>
-
-{% if action == "run" and testcase_results %}
-  <h3>Sample Test Case Results</h3>
-  <div style="display: flex; flex-direction: column; gap: 14px;">
-    {% for result in testcase_results %}
-      <div style="border-radius: 8px; border-left: 6px solid {% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %}; background-color: #f3f3f3; padding: 12px;">
-        <strong>Testcase {{ result.number }} — <span style="color:{% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %};">{{ result.verdict }}</span></strong><br>
-        <div><strong>Input:</strong> {{ result.input }}</div>
-        <div><strong>Expected Output:</strong> {{ result.expected }}</div>
-        <div><strong>Your Output:</strong> {{ result.actual }}</div>
-        {% if result.error %}
-          <div style="color: crimson;"><strong>Error:</strong> {{ result.error }}</div>
-        {% endif %}
+      <div class="button-bar">
+        <button type="submit" name="action" value="run">Run</button>
+        <button type="submit" name="action" value="submit">Submit</button>
       </div>
-    {% endfor %}
-    
-  </div>
-{% endif %}
-{% if action == "submit" and summary_verdicts %}
-  <h3>Submission Verdicts</h3>
-  <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-    {% for case in summary_verdicts %}
-      <div style="padding: 12px 20px; border-radius: 8px;
-                  background-color: {% if case.verdict == 'Passed' %}#d4edda{% else %}#f8d7da{% endif %};
-                  color: {% if case.verdict == 'Passed' %}green{% else %}crimson{% endif %};
-                  font-weight: bold; border-left: 5px solid {% if case.verdict == 'Passed' %}green{% else %}crimson{% endif %};">
-        {{ case.name }}
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
+    </form>
 
-{% endif %}
+    <!-- 🧠 AI Review Button -->
+    <form method="post" action="{% url 'ai_review' %}" style="text-align:center; margin-top: 24px;">
+      {% csrf_token %}
+      <input type="hidden" name="problem_id" value="{{ problem.id }}">
+      <input type="hidden" name="code" value="{{ code }}">
+      <button type="submit" style="
+        background-color: #5c4bc9;
+        color: white;
+        padding: 10px 24px;
+        font-weight: bold;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      ">🧠 AI Review</button>
+    </form>
+
+    <!-- ✅ Verdict Box -->
+    {% if verdict %}
+      <div class="verdict-box">Verdict: {{ verdict }}</div>
+    {% endif %}
+
+    <!-- 💬 AI Response (shown anytime AI Review was clicked) -->
+    {% if ai_response %}
+      <div style="margin-top: 25px; padding: 18px; background-color: #f1f0ff;
+                  border-left: 5px solid #5c4bc9; border-radius: 6px;">
+        <h4>💬 AI Response</h4>
+        <p>{{ ai_response }}</p>
+      </div>
+    {% endif %}
+
+    <!-- 🔎 Run Results -->
+    {% if action == "run" and testcase_results %}
+      <h3>Sample Test Case Results</h3>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        {% for result in testcase_results %}
+          <div style="border-radius: 8px; border-left: 6px solid {% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %}; background-color: #f3f3f3; padding: 12px;">
+            <strong>Testcase {{ result.number }} — <span style="color:{% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %};">{{ result.verdict }}</span></strong><br>
+            <div><strong>Input:</strong> {{ result.input }}</div>
+            <div><strong>Expected Output:</strong> {{ result.expected }}</div>
+            <div><strong>Your Output:</strong> {{ result.actual }}</div>
+            {% if result.error %}
+              <div style="color: crimson;"><strong>Error:</strong> {{ result.error }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- 📋 Submission Verdicts -->
+    {% if action == "submit" and summary_verdicts %}
+      <h3>Submission Verdicts</h3>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        {% for case in summary_verdicts %}
+          <div style="padding: 12px 20px; border-radius: 8px;
+                      background-color: {% if case.verdict == 'Passed' %}#d4edda{% else %}#f8d7da{% endif %};
+                      color: {% if case.verdict == 'Passed' %}green{% else %}crimson{% endif %};
+                      font-weight: bold; border-left: 5px solid {% if case.verdict == 'Passed' %}green{% else %}crimson{% endif %};">
+            {{ case.name }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}
-

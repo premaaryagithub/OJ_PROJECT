@@ -79,7 +79,7 @@
         <td>{{ sub.user.username }}</td>
         <td><a href="">{{ sub.problem.title }}</a></td>
         <td>{{ sub.verdict }}</td>
-        <td>{{ sub.submitted_at|naturaltime }}</td>
+        <td>{{ sub.created_at|naturaltime }}</td>
       </tr>
     {% endfor %}
   </table>

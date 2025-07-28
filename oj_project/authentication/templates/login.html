@@ -130,7 +130,7 @@ p{
         <div class="modal-content">
         <div class="modal-header">
             <h3 class="modal-title">Login</h3>
-            <button class="close-btn" id="close-login">&times;</button>
+            <button class="close-btn"  id="close-login">&times;</button>
         </div>
            {% if messages %}
         {% for message in messages %}
@@ -159,4 +159,12 @@ p{
     </p>
         </div>
         </div>
+
+            <script>
+         
+            document.getElementById('close-login').addEventListener('click', function () {
+        window.location.href = "{% url 'home' %}";
+    });
+        </script>
     </head>
+

@@ -37,7 +37,7 @@ class Submission(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     code = models.TextField()
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES, default='python')
-    submitted_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     verdict = models.CharField(max_length=30, choices=[
         ('Accepted', 'Accepted'),
         ('Wrong Answer', 'Wrong Answer'),

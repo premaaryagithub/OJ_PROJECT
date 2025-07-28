@@ -1,4 +1,5 @@
 # authentication/views.py
+from django.conf import settings
 from django import forms
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
@@ -14,7 +15,55 @@ from .models import Problem, TestCase, Submission
 from .models import Topic
 from .forms import SubmissionForm
 from .judge import evaluate_code
+import google.generativeai as genai
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, get_object_or_404
+from .models import Problem
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
+# 🔑 Configure Gemini
+genai.configure(api_key=settings.GEMINI_API_KEY)
+
+@csrf_exempt
+@login_required
+def ai_review_view(request):
+    if request.method == 'POST':
+        problem_id = request.POST.get('problem_id')
+        code = request.POST.get('code', '').strip()
+
+        problem = get_object_or_404(Problem, id=problem_id)
+
+        if code:
+            prompt = f"Review the following solution for the coding problem:\n\nProblem:\n{problem.description}\n\nCode:\n{code}"
+            verdict = "Accepted"  # Placeholder
+            testcase_results = []  # Placeholder
+            action = "ai_review"
+        else:
+            prompt = f"How would you approach the following coding problem?\n\n{problem.description}"
+            verdict = None
+            testcase_results = []
+            action = "ai_review"
+
+        ai_response = generate_gemini_response(prompt)
+
+        return render(request, 'problem_page.html', {
+            'problem': problem,
+            'testcases': problem.testcases.all(),
+            'ai_response': ai_response,
+            'code': code,
+            'verdict': verdict,
+            'testcase_results': testcase_results,
+            'action': action
+        })
+
+def generate_gemini_response(prompt):
+        try:
+            model = genai.GenerativeModel('gemini-2.5-flash')
+            response = model.generate_content(f"Give me an breif review on this:\n{prompt}")
+            return response.text
+        except Exception as e:
+            return f"⚠️ Error generating response: {str(e)}"
 
 
 @login_required
@@ -204,7 +253,7 @@ def my_submissions_view(request):
 def all_submissions_view(request):
     submissions = Submission.objects.all()\
         .select_related('problem', 'user')\
-        .order_by('created_at')  # Ascending by time
+        .order_by('-created_at')  # Ascending by time
     return render(request, 'submissions.html', {'submissions': submissions})
 
 

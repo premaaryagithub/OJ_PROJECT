@@ -171,5 +171,11 @@ p
         Already Have An  Account? <a href="{% url 'login' %}">Login here</a>
     </p>
 </div>
+<script>
+         
+            document.getElementById('close-register').addEventListener('click', function () {
+        window.location.href = "{% url 'home' %}";
+    });
+        </script>
 
 </head>

@@ -13,5 +13,6 @@ urlpatterns = [
     path('problems/<int:problem_id>/', views.problem_detail_view, name='problem_detail'),
     path('submissions/', views.all_submissions_view, name='submission_list'),
     path('my-submissions/', views.my_submissions_view, name='my_submission_list'),
+    path('ai-review/', views.ai_review_view, name='ai_review'), 
 
 ]
