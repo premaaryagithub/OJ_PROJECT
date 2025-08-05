@@ -20,3 +20,5 @@ EXPOSE 8000
 ENV DJANGO_SETTINGS_MODULE=oj_project.settings
 ENV PYTHONUNBUFFERED=1
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+

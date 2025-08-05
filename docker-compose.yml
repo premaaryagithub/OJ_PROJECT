@@ -1,4 +1,4 @@
-version: '3.8'
+
 services:
   web:
     build: .
@@ -10,6 +10,8 @@ services:
       - DJANGO_SETTINGS_MODULE=oj_project.settings
     depends_on:
       - db
+    env_file:
+      - .env
 
   db:
     image: postgres:14
