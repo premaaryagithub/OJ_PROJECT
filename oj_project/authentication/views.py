@@ -245,7 +245,7 @@ def register_view(request):
 def my_submissions_view(request):
     submissions = Submission.objects.filter(user=request.user)\
         .select_related('problem')\
-        .order_by('created_at')  # Ascending by time
+        .order_by('-created_at')  # Ascending by time
     return render(request, 'my_submission.html', {'submissions': submissions})
 
 
