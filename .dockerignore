@@ -1,6 +1,24 @@
+# 🐍 Python build artifacts
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# 🧪 Virtual environment
+myenv/
+
+# 🗃️ Local databases
 *.db
-.env
+*.sqlite3
+
+# 🧾 Logs and temp files
+*.log
 temp/
-media/
+
+# 🔐 Sensitive files
+.env
+
+# 🐳 Docker-related
+.dockerignore
+Dockerfile
+docker-compose.yml
