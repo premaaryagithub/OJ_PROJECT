@@ -7,14 +7,9 @@ __pycache__/
 # 🧪 Virtual environment
 myenv/
 
-# 🗃️ Local databases
-*.db
-*.sqlite3
 
 # 🧾 Logs and temp files
 *.log
-temp/
-
 # 🔐 Sensitive files
 .env
 
