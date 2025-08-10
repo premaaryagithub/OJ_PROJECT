@@ -36,15 +36,15 @@ def ai_review_view(request):
 
         if code:
             prompt = f"Review the following solution for the coding problem:\n\nProblem:\n{problem.description}\n\nCode:\n{code}"
-            verdict = "Accepted"  # Placeholder
+            verdict = None  # ✅ Don't assume it's accepted — let AI or judge decide if needed
             testcase_results = []  # Placeholder
-            action = "ai_review"
         else:
             prompt = f"How would you approach the following coding problem?\n\n{problem.description}"
+            code = None  # Explicitly set to None for clarity
             verdict = None
             testcase_results = []
-            action = "ai_review"
 
+        action = "ai_review"
         ai_response = generate_gemini_response(prompt)
 
         return render(request, 'problem_page.html', {
@@ -56,6 +56,7 @@ def ai_review_view(request):
             'testcase_results': testcase_results,
             'action': action
         })
+
 
 def generate_gemini_response(prompt):
         try:
