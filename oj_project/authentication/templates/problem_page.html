@@ -1,85 +1,99 @@
 {% extends "home.html" %}
 {% block content %}
 <style>
-.problem-page {
-  display: flex;
-  align-items: stretch; /* 🔥 ensures equal height */
-  justify-content: space-between;
-  padding: 40px 60px;
-  gap: 40px;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
   font-family: 'Poppins', sans-serif;
-  background-color: #f4f2fa;
 }
 
+.problem-page {
+  display: flex;
+  height: 85vh;
+  width: 100vw;
+  background-color: #f4f2fa;
+  position: relative;
+}
 
-  .left-panel, .right-panel {
-    background-color: #ffffff;
-    padding: 28px;
-    border-radius: 14px;
-    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
-    flex: 1;
-  }
+.left-panel, .right-panel {
+  padding: 24px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+  height: 100%;
+}
 
-  .left-panel h2 {
-    font-size: 30px;
-    font-weight: 700;
-    color: #4a2db6;
-    border-bottom: 2px solid #e3dffc;
-    padding-bottom: 10px;
-    margin-bottom: 24px;
-  }
+.left-panel {
+  width: 50%;
+}
 
-  .problem-description,
-  .format-section p {
-    font-size: 17px;
-    line-height: 1.7;
-    color: #333;
-    white-space: pre-wrap;
-  }
+.right-panel {
+  width: 50%;
+}
 
-  .format-section h4 {
-    font-size: 20px;
-    color: #4a2db6;
-    margin-top: 24px;
-    margin-bottom: 8px;
-  }
+.resizer {
+  width: 6px;
+  background-color: #ccc;
+  cursor: ew-resize;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 10;
+}
 
-  .testcase {
-    border-left: 4px solid #4a2db6;
-    background-color: #f9f7ff;
-    padding: 16px;
-    border-radius: 10px;
-    margin-bottom: 18px;
-    font-family: monospace;
-  }
+.left-panel h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #4a2db6;
+  border-bottom: 2px solid #e3dffc;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
 
-  .testcase-section h4 {
-    font-size: 15px;
-    color: #222;
-    margin-bottom: 6px;
-  }
+.problem-description,
+.format-section p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  white-space: pre-wrap;
+}
 
-  .testcase-content {
-    background-color: #ffffff;
-    border: 1px dashed #ccc;
-    padding: 10px 14px;
-    border-radius: 6px;
-    white-space: pre-wrap;
-  }
+.format-section h4 {
+  font-size: 18px;
+  color: #4a2db6;
+  margin-top: 20px;
+  margin-bottom: 6px;
+}
 
-  textarea {
-    width: 100%;
-    height: 260px;
-    font-family: monospace;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 14px;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
-    margin-bottom: 24px;
-    resize: vertical;
-  }
-  textarea#code{
+.testcase {
+  border-left: 4px solid #4a2db6;
+  background-color: #f9f7ff;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-family: monospace;
+}
+
+.testcase-section h4 {
+  font-size: 14px;
+  color: #222;
+  margin-bottom: 4px;
+}
+
+.testcase-content {
+  background-color: #ffffff;
+  border: 1px dashed #ccc;
+  padding: 10px 12px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+}
+
+textarea#code {
+  width: 100%;
+  height: 38vh;
   background-color: #1e1e1e;
   color: #dcdcdc;
   font-family: monospace;
@@ -89,77 +103,97 @@
   font-size: 14px;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   caret-color: white;
+  resize: vertical;
+  margin-bottom: 16px;
 }
 
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fefefe;
+}
 
-  select {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    margin-bottom: 18px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background-color: #fefefe;
-  }
+.button-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
-  .button-bar {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 24px;
-  }
+.button-bar button {
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #5c2dab;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.3s;
+}
 
-  .button-bar button {
-    flex: 1;
-    padding: 12px 18px;
-    font-size: 16px;
-    font-weight: 600;
-    background-color: red;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.3s;
-  }
+.button-bar button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  background-color: #4a148c;
+}
 
-  .button-bar button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 18px rgba(0,0,0,0.15);
-    background-color: green;
-  }
+.verdict-box {
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 15px;
+  background-color: #eae6ff;
+  color: {% if verdict == 'Accepted' %}green{% else %}crimson{% endif %};
+  border: 1px solid {% if verdict == 'Accepted' %}green{% else %}crimson{% endif %};
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  animation: fadeIn 0.5s ease-in-out;
+  margin-top: 20px;
+}
 
-  .verdict-box {
-    padding: 16px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 16px;
-    background-color: #eae6ff;
-    color: {% if verdict == 'Accepted' %}green{% else %}crimson{% endif %};
-    border: 1px solid {% if verdict == 'Accepted' %}green{% else %}crimson{% endif %};
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    animation: fadeIn 0.5s ease-in-out;
-  }
+.output-box, .error-box {
+  background-color: #fefefe;
+  padding: 14px;
+  border: 1px dashed #999;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  white-space: pre-wrap;
+  font-family: monospace;
+  font-size: 14px;
+}
 
-  .output-box, .error-box {
-    background-color: #fefefe;
-    padding: 16px;
-    border: 1px dashed #999;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    white-space: pre-wrap;
-    font-family: monospace;
-    font-size: 14px;
-  }
+.testcase-result {
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background-color: #f3f3f3;
+  border-left: 6px solid;
+}
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+.testcase-result.passed {
+  border-color: green;
+  color: green;
+}
+
+.testcase-result.failed {
+  border-color: crimson;
+  color: crimson;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 </style>
 
-<div class="problem-page">
-  <!-- Left Panel -->
-  <div class="left-panel">
+<div class="problem-page" id="problemPage">
+  <div class="left-panel" id="leftPanel">
     <h2>{{ problem.title }}</h2>
     <p class="problem-description">{{ problem.description }}</p>
 
@@ -192,9 +226,9 @@
     </div>
   </div>
 
-  <!-- Right Panel -->
-  <div class="right-panel">
-    <!-- 🟢 Run/Submit Form -->
+  <div class="resizer" id="resizer"></div>
+
+  <div class="right-panel" id="rightPanel">
     <form method="POST" action="{% url 'problem_detail' problem.id %}">
       {% csrf_token %}
       <label for="code">Your Code:</label>
@@ -213,8 +247,7 @@
       </div>
     </form>
 
-    <!-- 🧠 AI Review Button -->
-    <form method="post" action="{% url 'ai_review' %}" style="text-align:center; margin-top: 24px;">
+    <form method="post" action="{% url 'ai_review' %}" style="margin-top: 20px;">
       {% csrf_token %}
       <input type="hidden" name="problem_id" value="{{ problem.id }}">
       <input type="hidden" name="code" value="{{ code }}">
@@ -231,12 +264,10 @@
       ">🧠 AI Review</button>
     </form>
 
-    <!-- ✅ Verdict Box -->
     {% if verdict %}
-      <div class="verdict-box">Verdict: {{ verdict }}</div>
+      <div class="verdict-box" style="margin-top: 20px;">Verdict: {{ verdict }}</div>
     {% endif %}
 
-    <!-- 💬 AI Response (shown anytime AI Review was clicked) -->
     {% if ai_response %}
       <div style="margin-top: 25px; padding: 18px; background-color: #f1f0ff;
                   border-left: 5px solid #5c4bc9; border-radius: 6px;">
@@ -244,39 +275,63 @@
         <p>{{ ai_response }}</p>
       </div>
     {% endif %}
-
-    <!-- 🔎 Run Results -->
     {% if action == "run" and testcase_results %}
-      <h3>Sample Test Case Results</h3>
-      <div style="display: flex; flex-direction: column; gap: 14px;">
-        {% for result in testcase_results %}
-          <div style="border-radius: 8px; border-left: 6px solid {% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %}; background-color: #f3f3f3; padding: 12px;">
-            <strong>Testcase {{ result.number }} — <span style="color:{% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %};">{{ result.verdict }}</span></strong><br>
-            <div><strong>Input:</strong> {{ result.input }}</div>
-            <div><strong>Expected Output:</strong> {{ result.expected }}</div>
-            <div><strong>Your Output:</strong> {{ result.actual }}</div>
-            {% if result.error %}
-              <div style="color: crimson;"><strong>Error:</strong> {{ result.error }}</div>
-            {% endif %}
-          </div>
-        {% endfor %}
+  <h3 style="margin-top: 30px;">🧪 Testcase Results</h3>
+  <div style="display: flex; flex-direction: column; gap: 14px;">
+    {% for result in testcase_results %}
+      <div style="border-radius: 8px; border-left: 6px solid {% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %}; background-color: #f3f3f3; padding: 12px;">
+        <strong>Testcase {{ result.number }} — 
+          <span style="color:{% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %};">
+            {{ result.verdict }}
+          </span>
+        </strong><br>
+        <div><strong>Input:</strong> {{ result.input }}</div>
+        <div><strong>Expected Output:</strong> {{ result.expected }}</div>
+        <div><strong>Your Output:</strong> {{ result.actual }}</div>
+        {% if result.error %}
+          <div style="color: crimson;"><strong>Error:</strong> {{ result.error }}</div>
+        {% endif %}
       </div>
-    {% endif %}
-
-    <!-- 📋 Submission Verdicts -->
-    {% if action == "submit" and summary_verdicts %}
-      <h3>Submission Verdicts</h3>
-      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-        {% for case in summary_verdicts %}
-          <div style="padding: 12px 20px; border-radius: 8px;
-                      background-color: {% if case.verdict == 'Passed' %}#d4edda{% else %}#f8d7da{% endif %};
-                      color: {% if case.verdict == 'Passed' %}green{% else %}crimson{% endif %};
-                      font-weight: bold; border-left: 5px solid {% if case.verdict == 'Passed' %}green{% else %}crimson{% endif %};">
-            {{ case.name }}
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
+    {% endfor %}
   </div>
+{% endif %}
+
+  </div>
+
+
+  
 </div>
+
+<script>
+const resizer = document.getElementById('resizer');
+const leftPanel = document.getElementById('leftPanel');
+const rightPanel = document.getElementById('rightPanel');
+const container = document.getElementById('problemPage');
+
+let isResizing = false;
+
+resizer.addEventListener('mousedown', function(e) {
+  isResizing = true;
+  document.body.style.cursor = 'ew-resize';
+});
+
+document.addEventListener('mousemove', function(e) {
+  if (!isResizing) return;
+  const containerRect = container.getBoundingClientRect();
+  const offsetX = e.clientX - containerRect.left;
+  const totalWidth = containerRect.width;
+
+  const leftWidth = Math.max(250, Math.min(offsetX, totalWidth - 250));
+  const rightWidth = totalWidth - leftWidth;
+
+  leftPanel.style.width = `${leftWidth}px`;
+  rightPanel.style.width = `${rightWidth}px`;
+  resizer.style.left = `${leftWidth}px`;
+});
+
+document.addEventListener('mouseup', function() {
+  isResizing = false;
+  document.body.style.cursor = 'default';
+});
+</script>
 {% endblock %}

@@ -59,14 +59,19 @@
       <th>Verdict</th>
       <th>Submitted At</th>
     </tr>
-    {% for sub in submissions %}
-      <tr>
-        <td>{{ sub.user.username }}</td>
-        <td><a href="{% url 'problem_detail' sub.problem.id %}">{{ sub.problem.title }}</a></td>
-        <td>{{ sub.verdict }}</td>
-        <td>{{ sub.created_at|naturaltime }}</td>
-      </tr>
-    {% endfor %}
+{% for submission in submissions %}
+    <tr>
+        <td>{{ submission.user}}
+        <td>
+            <a href="{% url 'submission_detail' submission.id %}">
+                {{ submission.problem.title }}
+            </a>
+        </td>
+        <td>{{ submission.verdict }}</td>
+        <td>{{ submission.created_at }}</td>
+    </tr>
+{% endfor %}
+
   </table>
 </div>
 

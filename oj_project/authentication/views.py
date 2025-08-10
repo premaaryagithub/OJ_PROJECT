@@ -249,6 +249,25 @@ def my_submissions_view(request):
         .order_by('-created_at')  # Ascending by time
     return render(request, 'my_submission.html', {'submissions': submissions})
 
+@login_required
+def submission_detail_view(request, submission_id):
+    submission = get_object_or_404(Submission, id=submission_id, user=request.user)
+    problem = submission.problem
+    testcases = problem.testcases.all()
+
+    return render(request, 'submission_detail.html', {
+        'submission': submission,
+        'problem': problem,
+        'testcases': testcases,
+        'code': submission.code,
+        'language': submission.language,
+        'verdict': submission.verdict,
+        'output': submission.output,
+        'error': submission.error,
+        'action': 'view_submission'
+    })
+
+
 
 @login_required
 def all_submissions_view(request):

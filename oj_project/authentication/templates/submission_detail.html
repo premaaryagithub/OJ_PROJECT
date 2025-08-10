@@ -1,0 +1,89 @@
+{% extends 'home.html' %}
+{% block content %}
+
+<style>
+.submission-detail {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #333;
+}
+
+.submission-detail h2 {
+  color: #5c2dab;
+  font-size: 26px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.submission-detail h3 {
+  color: #4a148c;
+  margin-top: 30px;
+  font-size: 20px;
+}
+
+.submission-detail p {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.submission-detail strong {
+  color: #5c2dab;
+}
+
+.submission-detail pre {
+  background-color: #f4f4f9;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: 'Courier New', Courier, monospace;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  border: 1px solid #e0e0e0;
+}
+
+.submission-detail a {
+  display: inline-block;
+  margin-top: 30px;
+  text-decoration: none;
+  color: #6a1b9a;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.submission-detail a:hover {
+  color: #4a148c;
+  text-decoration: underline;
+}
+</style>
+
+<div class="submission-detail">
+  <h2>Submission for: {{ problem.title }}</h2>
+
+  <p><strong>Verdict:</strong> {{ verdict }}</p>
+  <p><strong>Language:</strong> {{ language }}</p>
+  <p><strong>Submitted At:</strong> {{ submission.created_at }}</p>
+
+  <h3>Code:</h3>
+  <pre>{{ code }}</pre>
+
+  {% if output %}
+    <h3>Output:</h3>
+    <pre>{{ output }}</pre>
+  {% endif %}
+
+  {% if error %}
+    <h3>Error:</h3>
+    <pre>{{ error }}</pre>
+  {% endif %}
+
+  <a href="{% url 'problem_detail' problem.id %}">🔙 Back to Problem</a>
+</div>
+
+{% endblock %}
