@@ -21,6 +21,9 @@ from django.shortcuts import render, get_object_or_404
 from .models import Problem
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+from .models import Problem, Submission
+
 
 # 🔑 Configure Gemini
 genai.configure(api_key=settings.GEMINI_API_KEY)
@@ -75,11 +78,13 @@ def problem_detail_view(request, problem_id):
     testcase_results = []
     summary_verdicts = []
     action = None
+    code = ''
+    language = 'python'  # Default language
 
     if request.method == 'POST':
-        code = request.POST.get('code')
-        language = request.POST.get('language')
-        action = request.POST.get('action')
+        code = request.POST.get('code', '')
+        language = request.POST.get('language', 'python')
+        action = request.POST.get('action', 'view')
         selected_testcases = testcases[:2] if action == 'run' else testcases
 
         all_passed = True
@@ -92,7 +97,6 @@ def problem_detail_view(request, problem_id):
                 all_passed = False
 
             if action == 'run':
-                # Full result breakdown
                 testcase_results.append({
                     'number': index + 1,
                     'input': test.input_data,
@@ -103,7 +107,6 @@ def problem_detail_view(request, problem_id):
                 })
 
             elif action == 'submit':
-                # Minimal verdict boxes (includes hidden cases)
                 summary_verdicts.append({
                     'name': f'Testcase {index + 1}',
                     'verdict': 'Passed' if passed else 'Failed'
@@ -111,7 +114,6 @@ def problem_detail_view(request, problem_id):
 
         verdict = 'Accepted' if all_passed else 'Wrong Answer'
 
-        # Save submission for submit
         if action == 'submit':
             Submission.objects.create(
                 user=request.user,
@@ -134,13 +136,14 @@ def problem_detail_view(request, problem_id):
             'action': action
         })
 
-    # ✅ Initial GET request (before any submission/run)
+    # Initial GET request
     return render(request, 'problem_page.html', {
         'problem': problem,
         'testcases': testcases,
+        'code': code,
+        'language': language,
         'action': 'view'
     })
-
 
 
 
