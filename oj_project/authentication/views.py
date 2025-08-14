@@ -30,24 +30,21 @@ genai.configure(api_key=settings.GEMINI_API_KEY)
 
 @csrf_exempt
 @login_required
+@login_required
 def ai_review_view(request):
     if request.method == 'POST':
         problem_id = request.POST.get('problem_id')
         code = request.POST.get('code', '').strip()
+        language = request.POST.get('language', 'python')  # Default to Python
 
         problem = get_object_or_404(Problem, id=problem_id)
 
         if code:
             prompt = f"Review the following solution for the coding problem:\n\nProblem:\n{problem.description}\n\nCode:\n{code}"
-            verdict = None  # ✅ Don't assume it's accepted — let AI or judge decide if needed
-            testcase_results = []  # Placeholder
         else:
             prompt = f"How would you approach the following coding problem?\n\n{problem.description}"
-            code = None  # Explicitly set to None for clarity
-            verdict = None
-            testcase_results = []
+            code = None  # Explicitly set to None
 
-        action = "ai_review"
         ai_response = generate_gemini_response(prompt)
 
         return render(request, 'problem_page.html', {
@@ -55,10 +52,12 @@ def ai_review_view(request):
             'testcases': problem.testcases.all(),
             'ai_response': ai_response,
             'code': code,
-            'verdict': verdict,
-            'testcase_results': testcase_results,
-            'action': action
+            'language': language,
+            'action': 'ai_review',
+            'verdict': None,
+            'testcase_results': []
         })
+
 
 
 def generate_gemini_response(prompt):

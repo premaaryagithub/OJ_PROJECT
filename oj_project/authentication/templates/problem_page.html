@@ -266,106 +266,139 @@ select {
       </div>
     </form>
 
-    <form method="post" action="{% url 'ai_review' %}" style="margin-top: 20px;">
-      {% csrf_token %}
-      <input type="hidden" name="problem_id" value="{{ problem.id }}">
-      <input type="hidden" name="code" id="ai_code">
-      <button type="submit" onclick="document.getElementById('ai_code').value = editor.getValue();" style="
-        background-color: #5c4bc9;
-        color: white;
-        padding: 10px 24px;
-        font-weight: bold;
-        font-size: 16px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      ">🧠 AI Review</button>
-    </form>
+<form method="post" action="{% url 'ai_review' %}" style="margin-top: 20px;">
+  {% csrf_token %}
+  <input type="hidden" name="problem_id" value="{{ problem.id }}">
+  <input type="hidden" name="code" id="code">
+  <input type="hidden" name="language" id="languageField">
+  <button type="submit" onclick="
+    document.getElementById('code').value = editor.getValue();
+    document.getElementById('languageField').value = document.getElementById('language').value;
+  " style="
+    background-color: #5c4bc9;
+    color: white;
+    padding: 10px 24px;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  ">🧠 AI Review</button>
+</form>
+
 
     {% if verdict %}
       <div class="verdict-box" style="margin-top: 20px;">Verdict: {{ verdict }}</div>
     {% endif %}
 
-    {% if ai_response %}
-      <div style="margin-top: 25px; padding: 18px; background-color: #f1f0ff;
-                  border-left: 5px solid #5c4bc9; border-radius: 6px;">
-        <h4>💬 AI Response</h4>
-        <p>{{ ai_response }}</p>
-      </div>
-    {% endif %}
-
-    {% if action == "run" and testcase_results %}
-      <h3 style="margin-top: 30px;">🧪 Testcase Results</h3>
-      <div style="display: flex; flex-direction: column; gap: 14px;">
-        {% for result in testcase_results %}
-          <div style="border-radius: 8px; border-left: 6px solid {% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %}; background-color: #f3f3f3; padding: 12px;">
-            <strong>Testcase {{ result.number }} — 
-              <span style="color:{% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %};">
-                {{ result.verdict }}
-              </span>
-            </strong><br>
-            <div><strong>Input:</strong> {{ result.input }}</div>
-            <div><strong>Expected Output:</strong> {{ result.expected }}</div>
-            <div><strong>Your Output:</strong> {{ result.actual }}</div>
-            {% if result.error %}
-              <div style="color: crimson;"><strong>Error:</strong> {{ result.error }}</div>
-            {% endif %}
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
+{% if ai_response %}
+  <div style="margin-top: 25px; padding: 18px; background-color: #f1f0ff;
+              border-left: 5px solid #5c4bc9; border-radius: 6px;">
+    <h4>💬 AI Response</h4>
+    <p>{{ ai_response }}</p>
   </div>
-</div>
+{% endif %}
 
-<script>
-const resizer = document.getElementById('resizer');
-const leftPanel = document.getElementById('leftPanel');
-const rightPanel = document.getElementById('rightPanel');
-const container = document.getElementById('problemPage');
 
-let isResizing = false;
+      {% if action == "run" and testcase_results %}
+        <h3 style="margin-top: 30px;">🧪 Testcase Results</h3>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          {% for result in testcase_results %}
+            <div style="border-radius: 8px; border-left: 6px solid {% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %}; background-color: #f3f3f3; padding: 12px;">
+              <strong>Testcase {{ result.number }} — 
+                <span style="color:{% if result.verdict == 'Passed' %}green{% else %}crimson{% endif %};">
+                  {{ result.verdict }}
+                </span>
+              </strong><br>
+              <div><strong>Input:</strong> {{ result.input }}</div>
+              <div><strong>Expected Output:</strong> {{ result.expected }}</div>
+              <div><strong>Your Output:</strong> {{ result.actual }}</div>
+              {% if result.error %}
+                <div style="color: crimson;"><strong>Error:</strong> {{ result.error }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+{% if action == "submit" and testcases %}
+  <h3 style="margin-top: 30px;">🔒 Testcase Results</h3>
+  <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px;">
+    {% for result in testcases %}
+      <div style="
+        padding: 10px 16px;
+        border-radius: 6px;
+        background-color: {% if result.verdict == 'Passed' %}#28a745{% else %}#8B0000{% endif %};
+        color: white;
+        font-weight: bold;
+        min-width: 120px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      ">
+        Testcase {{ result.number }} 
+        {% if result.verdict == 'Passed' %}
+          ✅
+        {% else %}
+          ❌
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
 
-resizer.addEventListener('mousedown', function(e) {
-  isResizing = true;
-  document.body.style.cursor = 'ew-resize';
-});
 
-document.addEventListener('mousemove', function(e) {
-  if (!isResizing) return;
-  const containerRect = container.getBoundingClientRect();
-  const offsetX = e.clientX - containerRect.left;
-  const totalWidth = containerRect.width;
+ 
 
-  const leftWidth = Math.max(250, Math.min(offsetX, totalWidth - 250));
-  const rightWidth = totalWidth - leftWidth;
+    </div>
+  </div>
 
-  leftPanel.style.width = `${leftWidth}px`;
-  rightPanel.style.width = `${rightWidth}px`;
-  resizer.style.left = `${leftWidth}px`;
-});
+  <script>
+  const resizer = document.getElementById('resizer');
+  const leftPanel = document.getElementById('leftPanel');
+  const rightPanel = document.getElementById('rightPanel');
+  const container = document.getElementById('problemPage');
 
-document.addEventListener('mouseup', function() {
-  isResizing = false;
-  document.body.style.cursor = 'default';
-});
+  let isResizing = false;
+
+  resizer.addEventListener('mousedown', function(e) {
+    isResizing = true;
+    document.body.style.cursor = 'ew-resize';
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!isResizing) return;
+    const containerRect = container.getBoundingClientRect();
+    const offsetX = e.clientX - containerRect.left;
+    const totalWidth = containerRect.width;
+
+    const leftWidth = Math.max(250, Math.min(offsetX, totalWidth - 250));
+    const rightWidth = totalWidth - leftWidth;
+
+    leftPanel.style.width = `${leftWidth}px`;
+    rightPanel.style.width = `${rightWidth}px`;
+    resizer.style.left = `${leftWidth}px`;
+  });
+
+  document.addEventListener('mouseup', function() {
+    isResizing = false;
+    document.body.style.cursor = 'default';
+  });
 
 
 
 const modeMap = {
-  python: "python",
-  cpp: "text/x-c++src",
-  java: "text/x-java"
-};
+    python: "python",
+    cpp: "text/x-c++src",
+    java: "text/x-java"
+  };
 
-const boilerplateMap = {
-  python: `def main():
+  const boilerplateMap = {
+    python: `def main():
     # Write your Python code here
-
 if __name__ == '__main__':
     main()`,
 
-  cpp: `#include <iostream>
+    cpp: `#include <iostream>
 using namespace std;
 
 int main() {
@@ -373,17 +406,27 @@ int main() {
     return 0;
 }`,
 
-  java: `public class Main {
+    java: `public class Main {
     public static void main(String[] args) {
         // Write your Java code here
     }
 }`
-};
+  };
 
-const languageSelect = document.getElementById("language");
+  const languageSelect = document.getElementById("language");
+
+  // Store user-written code per language
+  const codeMap = {};
+
+const initialCode = `{{ code|escapejs }}`;
+const selectedLang = "{{ language }}";  // already defined
+const initialLanguage = selectedLang;   // ✅ Add this line
+
+
+
 const editor = CodeMirror(document.getElementById("editor"), {
-  value: boilerplateMap[languageSelect.value],
-  mode: modeMap[languageSelect.value],
+  value: (initialCode && initialCode !== "None") ? initialCode : boilerplateMap[selectedLang],
+  mode: modeMap[selectedLang],
   theme: "dracula",
   lineNumbers: true,
   indentUnit: 4,
@@ -392,17 +435,35 @@ const editor = CodeMirror(document.getElementById("editor"), {
   autoCloseBrackets: true
 });
 
+  // Save initial code to codeMap
+  codeMap[initialLanguage] = editor.getValue();
 
-document.querySelector("form").addEventListener("submit", function () {
-  document.getElementById("code").value = editor.getValue();
-});
+  // Handle language switching
+  languageSelect.addEventListener("change", function () {
+    const newLang = this.value;
 
+    // Save current code before switching
+    const currentLang = editor.getOption("mode");
+    const currentCode = editor.getValue();
+    const currentLangKey = Object.keys(modeMap).find(key => modeMap[key] === currentLang);
+    if (currentLangKey) {
+      codeMap[currentLangKey] = currentCode;
+    }
 
-languageSelect.addEventListener("change", function () {
-  const selected = this.value;
-  editor.setOption("mode", modeMap[selected]);
-  editor.setValue(boilerplateMap[selected]);
-});
+    // Switch mode
+    editor.setOption("mode", modeMap[newLang]);
+
+    // Load saved code or fallback to boilerplate
+    const savedCode = codeMap[newLang];
+    editor.setValue(savedCode !== undefined ? savedCode : boilerplateMap[newLang]);
+  });
+
+  // Update hidden #code field before form submission
+  document.querySelectorAll("form").forEach(function(form) {
+    form.addEventListener("submit", function () {
+      document.getElementById("code").value = editor.getValue();
+    });
+  });
 </script>
 
-{% endblock %}
+  {% endblock %}
