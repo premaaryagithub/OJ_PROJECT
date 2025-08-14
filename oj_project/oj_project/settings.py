@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1'
 ]
+CSRF_TRUSTED_ORIGINS = ['https://oj-project-3puf.onrender.com']
 
 
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
