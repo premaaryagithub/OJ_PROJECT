@@ -13,18 +13,18 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# Load environment variables from .env file
+load_dotenv(os.path.join(BASE_DIR, '.env'))  # Add this line
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&=&yxf_s$hwqls#b5tt=8z2pze+zxk3a^e_ea#1-n+50p#efse'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-&=&yxf_s$hwqls#b5tt=8z2pze+zxk3a^e_ea#1-n+50p#efse')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
+
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 ALLOWED_HOSTS = [
     '*',
     'localhost',
