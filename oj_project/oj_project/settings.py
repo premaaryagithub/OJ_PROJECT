@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-GEMINI_API_KEY = "AIzaSyCLJ0YnZRfmCzt8KZMhOz4iPyNrac6Mh4I"
+GEMINI_API_KEY = "AIzaSyA4WfW2BJRVZqWC0DJkjTQAwspdpHd3c5Y"
 
 
 WSGI_APPLICATION = 'oj_project.wsgi.application'
