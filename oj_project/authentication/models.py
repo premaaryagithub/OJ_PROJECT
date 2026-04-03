@@ -51,3 +51,9 @@ class Submission(models.Model):
 
     def __str__(self):
         return f"{self.user.username} – {self.problem.title} – {self.verdict}"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['user', '-created_at']),
+            models.Index(fields=['problem', 'verdict']),
+        ]
