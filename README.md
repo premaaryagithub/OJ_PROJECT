@@ -275,6 +275,4 @@ Use Django Admin at `/admin/`:
 
 ---
 
-## License
 
-MIT
