@@ -32,6 +32,11 @@ genai.configure(api_key=settings.GEMINI_API_KEY)
 @login_required
 @login_required
 def ai_review_view(request):
+    print("=" * 50)
+    print(f"GEMINI_API_KEY from settings: {settings.GEMINI_API_KEY}")
+    print(f"API Key exists: {settings.GEMINI_API_KEY is not None}")
+    print(f"API Key length: {len(settings.GEMINI_API_KEY) if settings.GEMINI_API_KEY else 0}")
+    print("=" * 50)
     if request.method == 'POST':
         problem_id = request.POST.get('problem_id')
         code = request.POST.get('code', '').strip()
@@ -61,12 +66,19 @@ def ai_review_view(request):
 
 
 def generate_gemini_response(prompt):
-        try:
-            model = genai.GenerativeModel('gemini-2.5-flash')
-            response = model.generate_content(f"Give me an breif review on this:\n{prompt}")
-            return response.text
-        except Exception as e:
-            return f"⚠️ Error generating response: {str(e)}"
+    try:
+        # 🔍 DEBUG: Print API key status
+        print(f"Configuring Gemini with API key: {settings.GEMINI_API_KEY[:10]}..." if settings.GEMINI_API_KEY else "NO API KEY!")
+        
+        # Reconfigure here to be sure
+        genai.configure(api_key=settings.GEMINI_API_KEY)
+        
+        model = genai.GenerativeModel('gemini-2.0-flash-exp')  # Updated model name
+        response = model.generate_content(f"Give me a brief review on this:\n{prompt}")
+        return response.text
+    except Exception as e:
+        print(f"❌ Full error: {e}")
+        return f"⚠️ Error generating response: {str(e)}"
 
 
 @login_required
