@@ -14,8 +14,4 @@ db.sqlite3-journal
 .vscode/
 .idea/
 *.swp
-*.swo
-<<<<<<< HEAD
-"oj_project/keys/" 
-=======
->>>>>>> 304975c8879954b96a9c22f79340bb364a44287d
+*.swooj_project/keys/
